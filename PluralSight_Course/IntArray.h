@@ -3,21 +3,35 @@
 #include <utility>
 #include <iostream>
 
-class IntArray
+template<typename T>
+class Array
 {
-	int* m_array = nullptr;
+	T* m_array = nullptr;
 	const int size;
 	int end_pos;
 
 public:
-	explicit IntArray(int size) : size(size), end_pos(0)
+	explicit Array(int size) : size(size), end_pos(0)
 	{
-		m_array = new int[size] {};
+		m_array = new T[size] {};
 	}
 
-	~IntArray() { delete []m_array; }
+	Array(const Array &source) : size(source.size), end_pos(source.end_pos)
+	{
+		if (!source.IsEmpty())
+		{
+			m_array = new T[size] {};
 
-	void Insert(int &&value)
+			for (int i = 0; i < size; ++i)
+			{
+				m_array[i] = source[i];
+			}
+		}
+	}
+
+	~Array() { delete []m_array; }
+
+	void Insert(T &&value)
 	{
 		if (end_pos < size)
 		{

@@ -2,7 +2,7 @@
 #include <functional>
 #include "IntArray.h"
 
-std::ostream& operator << (std::ostream& stream, IntArray& item)
+std::ostream& operator << (std::ostream& stream, Array<int> &item)
 {
 	stream << "[ ";
 	for (int i = 0; i < item.GetSize(); i++)
@@ -28,7 +28,7 @@ void DoTryCatch(std::function<void()> func)
 
 int main()
 {
-	IntArray lista(5);
+	Array<int> lista(5);
 
 	std::cout << lista.IsEmpty() << std::endl;
 
@@ -47,6 +47,12 @@ int main()
 		std::cout << lista << std::endl;
 		std::cout << lista[1] << std::endl;
 		std::cout << lista[5] << std::endl;
+	});
+
+	DoTryCatch([&]()
+	{
+		Array<int> listaCopy = lista;
+		std::cout << listaCopy << std::endl;
 	});
 
 	return 0;
