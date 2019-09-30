@@ -40,14 +40,14 @@ public:
 		std::cout << "}" << std::endl;
 	}
 
-	int &operator[](int pos)
+	int &operator[](int pos) const
 	{
-		if (pos < size)
+		if (pos < size && pos >= 0)
 		{
 			return m_array[pos];
 		}
 
-		throw;
+		throw std::exception("Try to access a slot of memory out of the array.");
 	}
 };
 
