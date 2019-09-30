@@ -1,6 +1,5 @@
-#include <iostream>
 #include <functional>
-#include "IntArray.h"
+#include "Array.h"
 
 std::ostream& operator << (std::ostream& stream, Array<int> &item)
 {
@@ -53,6 +52,7 @@ int main()
 	{
 		Array<int> listaCopy = lista;
 		std::cout << listaCopy << std::endl;
+		std::cout << listaCopy.Find(11) << std::endl;
 	});
 
 	return 0;
