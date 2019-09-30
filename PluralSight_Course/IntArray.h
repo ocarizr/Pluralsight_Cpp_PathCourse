@@ -24,6 +24,10 @@ public:
 			m_array[end_pos] = std::move(value);
 			end_pos++;
 		}
+		else
+		{
+			throw std::exception("Try to add more data than the array size.");
+		}
 	}
 
 	int GetSize() const noexcept { return size; }
@@ -40,7 +44,7 @@ public:
 		std::cout << "}" << std::endl;
 	}
 
-	int &operator[](int pos) const
+	int &operator [] (int pos) const
 	{
 		if (pos < size && pos >= 0)
 		{
