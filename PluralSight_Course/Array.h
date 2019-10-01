@@ -6,15 +6,17 @@
 template<typename T>
 class Array
 {
-	T* m_array = nullptr;
-	const int size;
+	int size;
 	int end_pos;
+	T* m_array = nullptr;
 
 	const int k_not_found = -1;
 
 public:
 	explicit Array(int size) : size(size), end_pos(0)
 	{
+		static_assert(size > 0, "ERROR: Array size must be greater than 0.");
+
 		m_array = new T[size] {};
 	}
 
@@ -31,10 +33,49 @@ public:
 		}
 	}
 
-	// Need complete implementation
-	Array(const Array&& source) = delete;
+	Array(Array&& source) : size(source.size), end_pos(source.end_pos), m_array(source.m_array)
+	{		
+		source.m_array = nullptr;
+		source.size = 0;
+		source.end_pos = 0;
+	}
 
 	~Array() { delete []m_array; }
+
+	Array& operator=(Array&& source)
+	{
+		size = source.size;
+		end_pos = source.end_pos;
+
+		if (!source.m_array) m_array = new T[size];
+		else m_array = source.m_array;
+
+		source.size = 0;
+		source.end_pos = 0;
+		source.m_array = nullptr;
+
+		return *this;
+	}
+
+	Array& operator=(const Array& source)
+	{
+		size = source.size;
+		end_pos = source.end_pos;
+
+		if (m_array) delete[]m_array;
+
+		m_array = new T[size];
+
+		if (end_pos > 0)
+		{
+			for (int i = 0; i < size; ++i)
+			{
+				m_array[i] = source[i];
+			}
+		}
+
+		return *this;
+	}
 
 	virtual void Insert(T &&value)
 	{
@@ -45,7 +86,7 @@ public:
 		}
 		else
 		{
-			throw std::exception("Try to add more data than the array size.");
+			throw std::range_error("Try to add more data than the array size.");
 		}
 	}
 
@@ -53,17 +94,7 @@ public:
 
 	bool IsEmpty() const noexcept { return end_pos == 0; }
 
-	void PrintArray()
-	{
-		std::cout << "{ ";
-		for (int i = 0; i < end_pos; i++)
-		{
-			std::cout << m_array[i] << " ";
-		}
-		std::cout << "}" << std::endl;
-	}
-
-	int Find(const T &element)
+	virtual int Find(const T &element) const noexcept
 	{
 		for (int i = 0; i < size; ++i)
 		{
@@ -83,7 +114,19 @@ public:
 			return m_array[pos];
 		}
 
-		throw std::exception("Try to access a slot of memory out of the array.");
+		throw std::range_error("Try to access a slot of memory out of the array.");
+	}
+
+	friend std::ostream& operator << (std::ostream& stream, const Array<int>& item)
+	{
+		stream << "[ ";
+		for (int i = 0; i < item.GetSize(); i++)
+		{
+			stream << item[i] << ' ';
+		}
+		stream << ']';
+
+		return stream;
 	}
 };
 

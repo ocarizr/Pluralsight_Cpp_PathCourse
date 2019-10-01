@@ -1,18 +1,6 @@
 #include <functional>
 #include "Array.h"
 
-std::ostream& operator << (std::ostream& stream, Array<int> &item)
-{
-	stream << "[ ";
-	for (int i = 0; i < item.GetSize(); i++)
-	{
-		stream << item[i] << ' ';
-	}
-	stream << ']';
-
-	return stream;
-}
-
 void DoTryCatch(std::function<void()> func)
 {
 	try
@@ -27,6 +15,7 @@ void DoTryCatch(std::function<void()> func)
 
 int main()
 {
+	Array<int> list(0);
 	Array<int> lista(5);
 
 	std::cout << lista.IsEmpty() << std::endl;
@@ -52,7 +41,13 @@ int main()
 	{
 		Array<int> listaCopy = lista;
 		std::cout << listaCopy << std::endl;
-		std::cout << listaCopy.Find(11) << std::endl;
+		std::cout << listaCopy.Find(20) << std::endl;
+	});
+
+	DoTryCatch([&]()
+	{
+		Array<int> listaCopy(std::move(lista));
+		std::cout << listaCopy << std::endl;
 	});
 
 	return 0;
