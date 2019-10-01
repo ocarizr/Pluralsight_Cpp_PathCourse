@@ -1,11 +1,13 @@
 #pragma once
 
+#include <cassert>
 #include <utility>
 #include <iostream>
 
 template<typename T>
 class Array
 {
+protected:
 	int size;
 	int end_pos;
 	T* m_array = nullptr;
@@ -13,9 +15,9 @@ class Array
 	const int k_not_found = -1;
 
 public:
-	explicit Array(int size) : size(size), end_pos(0)
+	explicit Array(int const size_) : size(size_), end_pos(0)
 	{
-		static_assert(size > 0, "ERROR: Array size must be greater than 0.");
+		assert(size_ > 0, "ERROR: Array size must be greater than 0.");
 
 		m_array = new T[size] {};
 	}
@@ -117,7 +119,7 @@ public:
 		throw std::range_error("Try to access a slot of memory out of the array.");
 	}
 
-	friend std::ostream& operator << (std::ostream& stream, const Array<int>& item)
+	friend std::ostream& operator << (std::ostream& stream, const Array<T>& item)
 	{
 		stream << "[ ";
 		for (int i = 0; i < item.GetSize(); i++)

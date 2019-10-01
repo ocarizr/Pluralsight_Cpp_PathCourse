@@ -4,26 +4,33 @@
 #include "Array.h"
 
 template<typename T>
-class SortedArray : public Array
+class SortedArray : public Array<T>
 {
 public:
-	explicit SortedArray(int size) : Array(size) {};
+	explicit SortedArray(int size) : Array<T>(size) {};
 
-	void Insert(T&& value)
+	virtual void Insert(T&& value) override
 	{
-		if (end_pos < size)
+		if (Array<T>::end_pos < Array<T>::size)
 		{
-			T temp;
-			for (int i = 0; i < end_pos ++i)
+			for (int i = 0; i < Array<T>::end_pos; ++i)
 			{
-				if (value < m_array[i])
+				if (value < Array<T>::m_array[i])
 				{
-					temp = m_array[i];
-					m_array[i] = std::move(value);
-					value = temp;
-					end_pos++;
+					for (int j = Array<T>::end_pos - 1; j >= i; j--)
+					{
+						Array<T>::m_array[j + 1] = Array<T>::m_array[j];
+					}
+
+					Array<T>::m_array[i] = value;
+					Array<T>::end_pos++;
+
+					return;
 				}
 			}
+
+			Array<T>::m_array[Array<T>::end_pos] = value;
+			Array<T>::end_pos++;
 		}
 		else
 		{
@@ -31,11 +38,52 @@ public:
 		}
 	}
 
-	int Find(const T& element)
+	virtual int Find(const T& element) const noexcept override
 	{
-		std::binary_search(m_array.begin(), m_array.end(), element);
+		int left = 0;
+		int right = Array<T>::size - 1;
 
-		return k_not_found;
+		while (left <= right)
+		{
+			int middle = (left + right) / 2;
+
+			if (Array<T>::m_array[middle] == element)
+			{
+				return middle;
+			}
+			else if (Array<T>::m_array[middle] > element)
+			{
+				right = middle - 1;
+			}
+			else if (Array<T>::m_array[middle] < element)
+			{
+				left = middle + 1;
+			}
+		}
+
+		return Array<T>::k_not_found;
+	}
+
+	int& operator [] (int pos) const
+	{
+		if (pos < Array<T>::size && pos >= 0)
+		{
+			return Array<T>::m_array[pos];
+		}
+
+		throw std::range_error("Try to access a slot of memory out of the array.");
+	}
+
+	friend std::ostream& operator << (std::ostream& stream, const SortedArray<T>& item)
+	{
+		stream << "[ ";
+		for (int i = 0; i < item.GetSize(); i++)
+		{
+			stream << item[i] << ' ';
+		}
+		stream << ']';
+
+		return stream;
 	}
 };
 
