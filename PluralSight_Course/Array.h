@@ -79,7 +79,7 @@ public:
 		return *this;
 	}
 
-	virtual void Insert(T &&value)
+	virtual void Insert(T &value)
 	{
 		if (end_pos < size)
 		{
