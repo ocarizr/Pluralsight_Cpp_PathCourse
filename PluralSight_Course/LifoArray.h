@@ -82,7 +82,7 @@ public:
 
 	T Pop() noexcept
 	{
-		const auto &ret = Top();
+		auto &ret = Top();
 
 		m_array[m_top] = 0;
 		--m_top;
@@ -90,7 +90,7 @@ public:
 		return ret;
 	}
 
-	T Top() const noexcept
+	const T& Top() const noexcept
 	{
 		if (m_top == -1)
 			throw std::exception("Stack is Empty.");
@@ -101,6 +101,15 @@ public:
 	int Size() const noexcept { return m_size; }
 
 	int CurrentStackSize() const noexcept { return (m_top + 1); }
+
+	bool IsEmpty() { return m_top == -1; }
+
+	void Clear() noexcept
+	{ 
+		m_top = -1;
+		if (m_array) delete[]m_array;
+		m_array = new T[m_size];
+	}
 
 	friend std::ostream& operator << (std::ostream& out, const LifoArray<T>& source)
 	{
