@@ -17,7 +17,7 @@ public:
 		m_array = new T[m_size];
 	}
 
-	LifoArray(const LifoArray& source) : m_size(source.m_size), m_top(source.m_top)
+	LifoArray(const LifoArray<T>& source) noexcept : m_size(source.m_size), m_top(source.m_top)
 	{
 		m_array = new T[m_size];
 
@@ -27,14 +27,14 @@ public:
 		}
 	}
 
-	LifoArray(LifoArray&& source) : m_size(source.m_size), m_top(source.m_top), m_array(source.m_array)
+	LifoArray(LifoArray<T>&& source) noexcept : m_size(source.m_size), m_top(source.m_top), m_array(source.m_array)
 	{
 		source.m_array = nullptr;
 		source.m_size = 0;
 		source.m_top = -1;
 	}
 
-	LifoArray& operator = (const LifoArray& source)
+	LifoArray<T>& operator = (const LifoArray<T>& source)
 	{
 		m_size = source.m_size;
 		m_top = source.m_top;
@@ -49,7 +49,7 @@ public:
 		return *this;
 	}
 
-	LifoArray& operator = (LifoArray&& source)
+	LifoArray<T>& operator = (LifoArray<T>&& source)
 	{
 		m_size = source.m_size;
 		m_top = source.m_top;

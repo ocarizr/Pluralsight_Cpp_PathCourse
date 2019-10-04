@@ -22,7 +22,7 @@ public:
 		m_array = new T[size] {};
 	}
 
-	Array(const Array &source) : size(source.size), end_pos(source.end_pos)
+	Array(const Array<T> &source) noexcept : size(source.size), end_pos(source.end_pos)
 	{
 		if (!source.IsEmpty())
 		{
@@ -35,16 +35,16 @@ public:
 		}
 	}
 
-	Array(Array&& source) : size(source.size), end_pos(source.end_pos), m_array(source.m_array)
+	Array(Array<T>&& source) noexcept : size(source.size), end_pos(source.end_pos), m_array(source.m_array)
 	{		
 		source.m_array = nullptr;
 		source.size = 0;
 		source.end_pos = 0;
 	}
 
-	~Array() { delete []m_array; }
+	virtual ~Array() { delete []m_array; }
 
-	Array& operator=(Array&& source)
+	Array<T>& operator=(Array<T>&& source)
 	{
 		size = source.size;
 		end_pos = source.end_pos;
@@ -59,7 +59,7 @@ public:
 		return *this;
 	}
 
-	Array& operator=(const Array& source)
+	Array<T>& operator=(const Array<T>& source)
 	{
 		size = source.size;
 		end_pos = source.end_pos;
@@ -79,7 +79,7 @@ public:
 		return *this;
 	}
 
-	virtual void Insert(T &value)
+	virtual void Insert(const T &value)
 	{
 		if (end_pos < size)
 		{

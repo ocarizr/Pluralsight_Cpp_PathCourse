@@ -39,7 +39,7 @@ public:
 		itemsptr_vector.reserve(size);
 	}
 	
-	virtual void Insert(T& value) override
+	virtual void Insert(const T& value) override
 	{
 		Array<T>::Insert(value);
 
