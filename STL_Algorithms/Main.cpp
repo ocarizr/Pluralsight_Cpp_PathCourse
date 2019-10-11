@@ -1,4 +1,8 @@
+#include <chrono>
+#include <iomanip>
+#include <time.h>
 #include <vector>
+#include <sstream>
 #include <iostream>
 #include <iterator>
 #include <algorithm>
@@ -125,6 +129,74 @@ int main()
 					? "is " : "isn't ") 
 				<< "sorted by age." << std::endl;
 		});
+
+	do_try_catch([]()
+		{
+			using pairTry = std::pair<std::string, int>;
+
+			pairTry pair;
+			pair = std::move(pairTry("Rafael", 29));
+
+			std::cout << pair.first << ' ' << pair.second << std::endl;
+
+			std::vector<employees> vector_of_employees;
+			std::vector<employees> list_of_employees;
+
+			vector_preparation::fill_employees_vector(vector_of_employees);
+			vector_preparation::fill_employees_vector(list_of_employees);
+
+			bool equal = std::equal(std::begin(vector_of_employees), std::end(vector_of_employees), std::begin(list_of_employees),
+									[](auto& employee_vector, auto& employee_list)
+									{
+										return employee_vector.get_age() == employee_list.get_age() &&
+											employee_vector.get_name() == employee_list.get_name() &&
+											employee_vector.get_salary() == employee_list.get_salary() &&
+											employee_vector.get_department() == employee_list.get_department();
+									});
+
+			vector_preparation::print_employees_vector(vector_of_employees);
+			vector_preparation::print_employees_vector(list_of_employees);
+
+			std::cout << "The collections " << (equal ? "are " : "aren't ") << "equal." << std::endl;
+		});
+
+	do_try_catch([]()
+				 {
+					 time_t rawtime;
+					 time(&rawtime);
+					 struct tm ptm;
+					 gmtime_s(&ptm, &rawtime);
+
+					 auto start = std::chrono::high_resolution_clock::now();
+					 for (int i = 0; i < 100000; ++i)
+					 {
+						 std::stringstream fix_time;
+						 std::stringstream fix_date;
+
+						 fix_time << ptm.tm_hour << ':' << std::setfill('0') << std::setw(2) << ptm.tm_min << ':' << std::setfill('0') << std::setw(2) << ptm.tm_sec << ".000";
+						 fix_date << (1900 + ptm.tm_year) << std::setfill('0') << std::setw(2) << (ptm.tm_mon + 1) << std::setfill('0') << std::setw(2) << ptm.tm_mday;
+					 }
+					 auto end = std::chrono::high_resolution_clock::now();
+
+					 auto timestamp = end - start;
+
+					 std::cout << "Stringstream performance = " << timestamp.count() << " nanoseconds" << std::endl;
+
+					 start = std::chrono::high_resolution_clock::now();
+					 for (int i = 0; i < 100000; ++i)
+					 {
+						 char fix_time[13] = {};
+						 char fix_date[9] = {};
+
+						 sprintf_s(fix_date, "%04d%02d%02d", ptm.tm_year + 1900, ptm.tm_mon + 1, ptm.tm_mday);
+						 sprintf_s(fix_time, "%02d:%02d:%02d.%03d", ptm.tm_hour, ptm.tm_min, ptm.tm_sec, 0);
+					 }
+					 end = std::chrono::high_resolution_clock::now();
+
+					 timestamp = end - start;
+
+					 std::cout << "sprintf_s performance = " << timestamp.count() << " nanoseconds" << std::endl;
+				 });
 
 	return 0;
 }

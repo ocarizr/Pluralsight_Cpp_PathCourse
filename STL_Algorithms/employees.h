@@ -26,7 +26,7 @@ public:
 
 	std::string get_name() const noexcept { return m_name; }
 	int get_age() const noexcept { return m_age; }
-	std::string get_deparment() const noexcept { return m_department; }
+	std::string get_department() const noexcept { return m_department; }
 	float get_salary() const noexcept { return m_salary; }
 
 	friend std::ostream& operator << (std::ostream& out, const employees& source)
