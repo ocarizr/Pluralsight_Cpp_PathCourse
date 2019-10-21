@@ -1,7 +1,8 @@
 #include <chrono>
-#include <iomanip>
 #include <time.h>
 #include <vector>
+#include <iomanip>
+#include <numeric>
 #include <sstream>
 #include <iostream>
 #include <iterator>
@@ -154,12 +155,27 @@ int main()
 											employee_vector.get_department() == employee_list.get_department();
 									});
 
+			if (!equal)
+			{
+				auto firstDiff = std::mismatch(std::begin(vector_of_employees), std::end(vector_of_employees), std::begin(list_of_employees),
+											   [](auto& employee_vector, auto& employee_list)
+											   {
+												   return employee_vector.get_age() == employee_list.get_age() &&
+													   employee_vector.get_name() == employee_list.get_name() &&
+													   employee_vector.get_salary() == employee_list.get_salary() &&
+													   employee_vector.get_department() == employee_list.get_department();
+											   });
+
+				std::cout << "First Diff is on slot: " << firstDiff.first - std::begin(vector_of_employees) << std::endl;
+			}
+
 			vector_preparation::print_employees_vector(vector_of_employees);
 			vector_preparation::print_employees_vector(list_of_employees);
 
 			std::cout << "The collections " << (equal ? "are " : "aren't ") << "equal." << std::endl;
 		});
 
+	// Comparing performance to build a string
 	do_try_catch([]()
 				 {
 					 time_t rawtime;
@@ -196,6 +212,55 @@ int main()
 					 timestamp = end - start;
 
 					 std::cout << "sprintf_s performance = " << timestamp.count() << " nanoseconds" << std::endl;
+				 });
+
+	do_try_catch([]()
+				 {
+					 std::vector<int> vector_of_int;
+					 vector_preparation::fill_vector(vector_of_int);
+
+					 auto total = std::accumulate(std::begin(vector_of_int), std::end(vector_of_int), 0);
+
+					 std::vector<employees> vector_of_employees;
+					 vector_preparation::fill_employees_vector(vector_of_employees);
+
+					 auto total_salary = std::accumulate(std::begin(vector_of_employees), std::end(vector_of_employees), 0,
+														 [](float total, const auto& employee)
+														 {
+															 return total += employee.get_salary();
+														 });
+
+					 std::cout << "Accumulate of vector_of_int: " << total << std::endl;
+					 std::cout << "Accumulate of salaries: " << total_salary << std::endl;
+
+					 auto size_of_vector = std::size(vector_of_int);
+					 auto amount_of_employees = std::size(vector_of_employees);
+
+					 std::cout << "Size of the vector: " << size_of_vector << std::endl;
+					 std::cout << "Amout of employees: " << amount_of_employees << std::endl;
+
+					 vector_preparation::print_employees_vector(vector_of_employees);
+
+					 std::for_each(std::begin(vector_of_employees), std::end(vector_of_employees),
+								   [](auto& employee)
+								   {
+									   employee.set_salary(employee.get_salary() * 1.1);
+								   });
+
+					 vector_preparation::print_employees_vector(vector_of_employees);
+				 });
+
+	do_try_catch([]()
+				 {
+					 std::vector<employees> vector_of_employees;
+
+					 vector_preparation::fill_employees_vector(vector_of_employees);
+
+					 auto second_collection = vector_of_employees;
+
+					 vector_preparation::print_employees_vector(vector_of_employees);
+
+					 vector_preparation::print_employees_vector(second_collection);
 				 });
 
 	return 0;
