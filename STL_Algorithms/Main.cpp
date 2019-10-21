@@ -259,8 +259,20 @@ int main()
 					 auto second_collection = vector_of_employees;
 
 					 vector_preparation::print_employees_vector(vector_of_employees);
-
 					 vector_preparation::print_employees_vector(second_collection);
+
+					 std::vector<int> vector_of_int;
+					 vector_preparation::fill_vector(vector_of_int);
+					 std::vector<int> second_vector(std::size(vector_of_int));
+
+					 auto iterator = std::copy_if(std::begin(vector_of_int), std::end(vector_of_int), std::begin(second_vector),
+												  [](int& value)
+												  {
+													  return value > 90;
+												  });
+					 second_vector.resize(std::distance(std::begin(second_vector), iterator));
+
+					 vector_preparation::print_vector(second_vector);
 				 });
 
 	return 0;
