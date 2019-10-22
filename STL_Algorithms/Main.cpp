@@ -21,7 +21,7 @@ void do_try_catch(std::function<void()> func)
 	{
 		func();
 	}
-	catch (std::exception& ex)
+	catch (std::exception & ex)
 	{
 		std::cout << "ERROR: " << ex.what() << std::endl;
 	}
@@ -38,14 +38,14 @@ int main()
 	do_try_catch([]()
 		{
 			std::vector<int> vector_of_int;
-			vector_preparation::fill_vector(vector_of_int);
+			vector_preparation::fill_vector(vector_of_int, 75);
 			const int target = 1;
 
 			auto count = std::count(vector_of_int.begin(), vector_of_int.end(), target);
 			auto find = std::find(vector_of_int.begin(), vector_of_int.end(), target);
 
 			auto count_if = std::count_if(std::begin(vector_of_int), std::end(vector_of_int),
-				[](auto& number)
+				[](const auto& number)
 				{
 					return number % 2 == 0;
 				});
@@ -58,7 +58,7 @@ int main()
 	do_try_catch([]()
 		{
 			std::vector<int> vector_of_int;
-			vector_preparation::fill_vector(vector_of_int);
+			vector_preparation::fill_vector(vector_of_int, 10);
 
 			bool all_of, any_of, none_of;
 
@@ -72,7 +72,7 @@ int main()
 	do_try_catch([]()
 		{
 			std::vector<int> vector_of_int;
-			vector_preparation::fill_vector(vector_of_int);
+			vector_preparation::fill_vector(vector_of_int, 100);
 
 			vector_preparation::print_vector(vector_of_int);
 
@@ -89,7 +89,7 @@ int main()
 			vector_preparation::print_employees_vector(employees);
 
 			std::sort(std::begin(employees), std::end(employees),
-				[](auto& employee_one, auto& employee_two)
+				[](const auto& employee_one, const auto& employee_two)
 				{
 					return employee_one.get_salary() < employee_two.get_salary();
 				});
@@ -97,7 +97,7 @@ int main()
 			vector_preparation::print_employees_vector(employees);
 
 			std::sort(std::begin(employees), std::end(employees),
-				[](auto& employee_one, auto& employee_two)
+				[](const auto& employee_one, const auto& employee_two)
 				{
 					return employee_one.get_name() < employee_two.get_name();
 				});
@@ -106,29 +106,29 @@ int main()
 
 			std::cout << "The vector " <<
 				(std::is_sorted(std::begin(employees), std::end(employees),
-					[](auto& employee_one, auto& employee_two)
+					[](const auto& employee_one, const auto& employee_two)
 					{
 						return employee_one.get_age() < employee_two.get_age();
 					})
 					? "is " : "isn't ")
 				<< "sorted by age." << std::endl;
 
-			std::stable_sort(std::begin(employees), std::end(employees),
-				[](auto& employee_one, auto& employee_two)
-				{
-					return employee_one.get_age() < employee_two.get_age();
-				});
+					std::stable_sort(std::begin(employees), std::end(employees),
+						[](const auto& employee_one, const auto& employee_two)
+						{
+							return employee_one.get_age() < employee_two.get_age();
+						});
 
-			vector_preparation::print_employees_vector(employees);
+					vector_preparation::print_employees_vector(employees);
 
-			std::cout << "The vector " << 
-				(std::is_sorted(std::begin(employees), std::end(employees),
-				[](auto& employee_one, auto& employee_two)
-					{
-						return employee_one.get_age() < employee_two.get_age();
-					}) 
-					? "is " : "isn't ") 
-				<< "sorted by age." << std::endl;
+					std::cout << "The vector " <<
+						(std::is_sorted(std::begin(employees), std::end(employees),
+							[](const auto& employee_one, const auto& employee_two)
+							{
+								return employee_one.get_age() < employee_two.get_age();
+							})
+							? "is " : "isn't ")
+						<< "sorted by age." << std::endl;
 		});
 
 	do_try_catch([]()
@@ -147,24 +147,24 @@ int main()
 			vector_preparation::fill_employees_vector(list_of_employees);
 
 			bool equal = std::equal(std::begin(vector_of_employees), std::end(vector_of_employees), std::begin(list_of_employees),
-									[](auto& employee_vector, auto& employee_list)
-									{
-										return employee_vector.get_age() == employee_list.get_age() &&
-											employee_vector.get_name() == employee_list.get_name() &&
-											employee_vector.get_salary() == employee_list.get_salary() &&
-											employee_vector.get_department() == employee_list.get_department();
-									});
+				[](const auto& employee_vector, const auto& employee_list)
+				{
+					return employee_vector.get_age() == employee_list.get_age() &&
+						employee_vector.get_name() == employee_list.get_name() &&
+						employee_vector.get_salary() == employee_list.get_salary() &&
+						employee_vector.get_department() == employee_list.get_department();
+				});
 
 			if (!equal)
 			{
 				auto firstDiff = std::mismatch(std::begin(vector_of_employees), std::end(vector_of_employees), std::begin(list_of_employees),
-											   [](auto& employee_vector, auto& employee_list)
-											   {
-												   return employee_vector.get_age() == employee_list.get_age() &&
-													   employee_vector.get_name() == employee_list.get_name() &&
-													   employee_vector.get_salary() == employee_list.get_salary() &&
-													   employee_vector.get_department() == employee_list.get_department();
-											   });
+					[](const auto& employee_vector, const auto& employee_list)
+					{
+						return employee_vector.get_age() == employee_list.get_age() &&
+							employee_vector.get_name() == employee_list.get_name() &&
+							employee_vector.get_salary() == employee_list.get_salary() &&
+							employee_vector.get_department() == employee_list.get_department();
+					});
 
 				std::cout << "First Diff is on slot: " << firstDiff.first - std::begin(vector_of_employees) << std::endl;
 			}
@@ -177,103 +177,134 @@ int main()
 
 	// Comparing performance to build a string
 	do_try_catch([]()
-				 {
-					 time_t rawtime;
-					 time(&rawtime);
-					 struct tm ptm;
-					 gmtime_s(&ptm, &rawtime);
+		{
+			time_t rawtime;
+			time(&rawtime);
+			struct tm ptm;
+			gmtime_s(&ptm, &rawtime);
 
-					 auto start = std::chrono::high_resolution_clock::now();
-					 for (int i = 0; i < 100000; ++i)
-					 {
-						 std::stringstream fix_time;
-						 std::stringstream fix_date;
+			auto start = std::chrono::high_resolution_clock::now();
+			for (int i = 0; i < 100000; ++i)
+			{
+				std::stringstream fix_time;
+				std::stringstream fix_date;
 
-						 fix_time << ptm.tm_hour << ':' << std::setfill('0') << std::setw(2) << ptm.tm_min << ':' << std::setfill('0') << std::setw(2) << ptm.tm_sec << ".000";
-						 fix_date << (1900 + ptm.tm_year) << std::setfill('0') << std::setw(2) << (ptm.tm_mon + 1) << std::setfill('0') << std::setw(2) << ptm.tm_mday;
-					 }
-					 auto end = std::chrono::high_resolution_clock::now();
+				fix_time << ptm.tm_hour << ':' << std::setfill('0') << std::setw(2) << ptm.tm_min << ':' << std::setfill('0') << std::setw(2) << ptm.tm_sec << ".000";
+				fix_date << (1900 + ptm.tm_year) << std::setfill('0') << std::setw(2) << (ptm.tm_mon + 1) << std::setfill('0') << std::setw(2) << ptm.tm_mday;
+			}
+			auto end = std::chrono::high_resolution_clock::now();
 
-					 auto timestamp = end - start;
+			auto timestamp = end - start;
 
-					 std::cout << "Stringstream performance = " << timestamp.count() << " nanoseconds" << std::endl;
+			std::cout << "Stringstream performance = " << timestamp.count() << " nanoseconds" << std::endl;
 
-					 start = std::chrono::high_resolution_clock::now();
-					 for (int i = 0; i < 100000; ++i)
-					 {
-						 char fix_time[13] = {};
-						 char fix_date[9] = {};
+			start = std::chrono::high_resolution_clock::now();
+			for (int i = 0; i < 100000; ++i)
+			{
+				char fix_time[13] = {};
+				char fix_date[9] = {};
 
-						 sprintf_s(fix_date, "%04d%02d%02d", ptm.tm_year + 1900, ptm.tm_mon + 1, ptm.tm_mday);
-						 sprintf_s(fix_time, "%02d:%02d:%02d.%03d", ptm.tm_hour, ptm.tm_min, ptm.tm_sec, 0);
-					 }
-					 end = std::chrono::high_resolution_clock::now();
+				sprintf_s(fix_date, "%04d%02d%02d", ptm.tm_year + 1900, ptm.tm_mon + 1, ptm.tm_mday);
+				sprintf_s(fix_time, "%02d:%02d:%02d.%03d", ptm.tm_hour, ptm.tm_min, ptm.tm_sec, 0);
+			}
+			end = std::chrono::high_resolution_clock::now();
 
-					 timestamp = end - start;
+			timestamp = end - start;
 
-					 std::cout << "sprintf_s performance = " << timestamp.count() << " nanoseconds" << std::endl;
-				 });
-
-	do_try_catch([]()
-				 {
-					 std::vector<int> vector_of_int;
-					 vector_preparation::fill_vector(vector_of_int);
-
-					 auto total = std::accumulate(std::begin(vector_of_int), std::end(vector_of_int), 0);
-
-					 std::vector<employees> vector_of_employees;
-					 vector_preparation::fill_employees_vector(vector_of_employees);
-
-					 auto total_salary = std::accumulate(std::begin(vector_of_employees), std::end(vector_of_employees), 0,
-														 [](float total, const auto& employee)
-														 {
-															 return total += employee.get_salary();
-														 });
-
-					 std::cout << "Accumulate of vector_of_int: " << total << std::endl;
-					 std::cout << "Accumulate of salaries: " << total_salary << std::endl;
-
-					 auto size_of_vector = std::size(vector_of_int);
-					 auto amount_of_employees = std::size(vector_of_employees);
-
-					 std::cout << "Size of the vector: " << size_of_vector << std::endl;
-					 std::cout << "Amout of employees: " << amount_of_employees << std::endl;
-
-					 vector_preparation::print_employees_vector(vector_of_employees);
-
-					 std::for_each(std::begin(vector_of_employees), std::end(vector_of_employees),
-								   [](auto& employee)
-								   {
-									   employee.set_salary(employee.get_salary() * 1.1);
-								   });
-
-					 vector_preparation::print_employees_vector(vector_of_employees);
-				 });
+			std::cout << "sprintf_s performance = " << timestamp.count() << " nanoseconds" << std::endl;
+		});
 
 	do_try_catch([]()
-				 {
-					 std::vector<employees> vector_of_employees;
+		{
+			std::vector<int> vector_of_int;
+			vector_preparation::fill_vector(vector_of_int, 50);
 
-					 vector_preparation::fill_employees_vector(vector_of_employees);
+			auto total = std::accumulate(std::begin(vector_of_int), std::end(vector_of_int), 0);
 
-					 auto second_collection = vector_of_employees;
+			std::vector<employees> vector_of_employees;
+			vector_preparation::fill_employees_vector(vector_of_employees);
 
-					 vector_preparation::print_employees_vector(vector_of_employees);
-					 vector_preparation::print_employees_vector(second_collection);
+			auto total_salary = std::accumulate(std::begin(vector_of_employees), std::end(vector_of_employees), 0,
+				[](float total, const auto& employee)
+				{
+					return total += employee.get_salary();
+				});
 
-					 std::vector<int> vector_of_int;
-					 vector_preparation::fill_vector(vector_of_int);
-					 std::vector<int> second_vector(std::size(vector_of_int));
+			std::cout << "Accumulate of vector_of_int: " << total << std::endl;
+			std::cout << "Accumulate of salaries: " << total_salary << std::endl;
 
-					 auto iterator = std::copy_if(std::begin(vector_of_int), std::end(vector_of_int), std::begin(second_vector),
-												  [](int& value)
-												  {
-													  return value > 90;
-												  });
-					 second_vector.resize(std::distance(std::begin(second_vector), iterator));
+			auto size_of_vector = std::size(vector_of_int);
+			auto amount_of_employees = std::size(vector_of_employees);
 
-					 vector_preparation::print_vector(second_vector);
-				 });
+			std::cout << "Size of the vector: " << size_of_vector << std::endl;
+			std::cout << "Amout of employees: " << amount_of_employees << std::endl;
+
+			vector_preparation::print_employees_vector(vector_of_employees);
+
+			std::for_each(std::begin(vector_of_employees), std::end(vector_of_employees),
+				[](auto& employee)
+				{
+					employee.set_salary(employee.get_salary() * 1.1);
+				});
+
+			vector_preparation::print_employees_vector(vector_of_employees);
+		});
+
+	do_try_catch([]()
+		{
+			std::vector<employees> vector_of_employees;
+
+			vector_preparation::fill_employees_vector(vector_of_employees);
+
+			auto second_collection = vector_of_employees;
+
+			vector_preparation::print_employees_vector(vector_of_employees);
+			vector_preparation::print_employees_vector(second_collection);
+
+			auto it = std::remove_if(std::begin(second_collection), std::end(second_collection),
+				[](const auto& employee)
+				{
+					return employee.get_salary() < 5000.00f;
+				});
+			second_collection.erase(it, std::end(second_collection));
+
+			vector_preparation::print_employees_vector(second_collection);
+
+			std::transform(std::begin(second_collection), std::end(second_collection), std::begin(second_collection),
+				[](employees& employee)
+				{
+					employee.set_salary(employee.get_salary() * 1.5);
+					return employee;
+				});
+
+			vector_preparation::print_employees_vector(second_collection);
+
+			std::vector<int> vector_of_int;
+			vector_preparation::fill_vector(vector_of_int, 120);
+			std::vector<int> second_vector(std::size(vector_of_int));
+
+			auto iterator = std::copy_if(std::begin(vector_of_int), std::end(vector_of_int), std::begin(second_vector),
+				[](const int& value)
+				{
+					return value > 90;
+				});
+			second_vector.resize(std::distance(std::begin(second_vector), iterator));
+
+			vector_preparation::print_vector(second_vector);
+		});
+
+	do_try_catch([]()
+		{
+			std::vector<int> vector;
+			vector_preparation::fill_vector_with_duplicates(vector, 50);
+
+			vector_preparation::print_vector(vector);
+
+			std::sort(std::begin(vector), std::end(vector));
+
+			vector.erase(std::unique(std::begin(vector), std::end(vector)), std::end(vector));
+			vector_preparation::print_vector;
+		});
 
 	return 0;
 }

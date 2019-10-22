@@ -19,6 +19,8 @@ public:
 	employees& operator = (const employees& source) = default;
 	employees& operator = (employees&& source) = default;
 
+	~employees() = default;
+
 	void set_name(std::string name) { m_name = name; }
 	void set_age(int age) { m_age = age; }
 	void set_department(std::string department) { m_department = department; }
