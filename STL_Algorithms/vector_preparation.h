@@ -48,6 +48,17 @@ public:
 		std::cout << std::endl;
 	}
 
+	static void print_vector_backwards(const std::vector<int>& v)
+	{
+		std::cout << std::endl;
+		std::for_each(std::rbegin(v), std::rend(v),
+			[](int value)
+			{
+				std::cout << value << ' ';
+			});
+		std::cout << std::endl;
+	}
+
 	static void print_employees_vector(const std::vector<employees>& e)
 	{
 		std::cout << std::endl;

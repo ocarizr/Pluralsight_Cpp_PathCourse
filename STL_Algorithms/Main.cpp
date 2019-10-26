@@ -303,7 +303,33 @@ int main()
 			std::sort(std::begin(vector), std::end(vector));
 
 			vector.erase(std::unique(std::begin(vector), std::end(vector)), std::end(vector));
-			vector_preparation::print_vector;
+			vector_preparation::print_vector(vector);
+
+			vector_preparation::print_vector_backwards(vector);
+
+			std::vector<int> second_vector(10);
+
+			std::copy_n(std::begin(vector), 10, std::begin(second_vector));
+
+			vector_preparation::print_vector(second_vector);
+		});
+
+	do_try_catch([]()
+		{
+			std::vector<int> vector_of_int;
+			vector_preparation::fill_vector(vector_of_int, 50);
+
+			auto query_result = std::stable_partition(std::begin(vector_of_int), std::end(vector_of_int),
+				[](const int& number)
+				{
+					return number % 2 != 0;
+				});
+
+			vector_preparation::print_vector(vector_of_int);
+
+			std::rotate(std::begin(vector_of_int), query_result - 1, query_result);
+			
+			vector_preparation::print_vector(vector_of_int);
 		});
 
 	return 0;
