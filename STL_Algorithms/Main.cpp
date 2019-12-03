@@ -21,7 +21,7 @@ void do_try_catch(std::function<void()> func)
 	{
 		func();
 	}
-	catch (std::exception& ex)
+	catch (std::exception & ex)
 	{
 		std::cout << "ERROR: " << ex.what() << std::endl;
 	}
@@ -36,144 +36,144 @@ int main()
 	std::set_terminate(unexpected_error);
 
 	do_try_catch([]()
-		{
-			std::vector<int> vector_of_int;
-			vector_preparation::fill_vector(vector_of_int);
-			const int target = 1;
+				 {
+					 std::vector<int> vector_of_int;
+					 vector_preparation::fill_vector(vector_of_int);
+					 const int target = 1;
 
-			auto count = std::count(vector_of_int.begin(), vector_of_int.end(), target);
-			auto find = std::find(vector_of_int.begin(), vector_of_int.end(), target);
+					 auto count = std::count(vector_of_int.begin(), vector_of_int.end(), target);
+					 auto find = std::find(vector_of_int.begin(), vector_of_int.end(), target);
 
-			auto count_if = std::count_if(std::begin(vector_of_int), std::end(vector_of_int),
-				[](auto& number)
-				{
-					return number % 2 == 0;
-				});
+					 auto count_if = std::count_if(std::begin(vector_of_int), std::end(vector_of_int),
+												   [](auto& number)
+												   {
+													   return number % 2 == 0;
+												   });
 
-			std::cout << "The vector has " << count << " number " << target << std::endl;
-			std::cout << "The vector has " << count_if << " even numbers." << std::endl;
-			std::cout << "The number " << target << (find != vector_of_int.end() ? " exists in the vector." : " doesn't exists in the vector.") << std::endl;
-		});
-
-	do_try_catch([]()
-		{
-			std::vector<int> vector_of_int;
-			vector_preparation::fill_vector(vector_of_int);
-
-			bool all_of, any_of, none_of;
-
-			all_of = std::all_of(std::begin(vector_of_int), std::end(vector_of_int), [](auto& element) { return element % 2 != 0; });
-			none_of = std::none_of(std::begin(vector_of_int), std::end(vector_of_int), [](auto& element) { return element % 2 != 0; });
-			any_of = std::any_of(std::begin(vector_of_int), std::end(vector_of_int), [](auto& element) { return element % 2 != 0; });
-
-			std::cout << all_of << ' ' << none_of << ' ' << any_of << std::endl;
-		});
+					 std::cout << "The vector has " << count << " number " << target << std::endl;
+					 std::cout << "The vector has " << count_if << " even numbers." << std::endl;
+					 std::cout << "The number " << target << (find != vector_of_int.end() ? " exists in the vector." : " doesn't exists in the vector.") << std::endl;
+				 });
 
 	do_try_catch([]()
-		{
-			std::vector<int> vector_of_int;
-			vector_preparation::fill_vector(vector_of_int);
+				 {
+					 std::vector<int> vector_of_int;
+					 vector_preparation::fill_vector(vector_of_int);
 
-			vector_preparation::print_vector(vector_of_int);
+					 bool all_of, any_of, none_of;
 
-			std::sort(std::begin(vector_of_int), std::end(vector_of_int));
+					 all_of = std::all_of(std::begin(vector_of_int), std::end(vector_of_int), [](auto& element) { return element % 2 != 0; });
+					 none_of = std::none_of(std::begin(vector_of_int), std::end(vector_of_int), [](auto& element) { return element % 2 != 0; });
+					 any_of = std::any_of(std::begin(vector_of_int), std::end(vector_of_int), [](auto& element) { return element % 2 != 0; });
 
-			vector_preparation::print_vector(vector_of_int);
-		});
-
-	do_try_catch([]()
-		{
-			std::vector<employees> employees;
-			vector_preparation::fill_employees_vector(employees);
-
-			vector_preparation::print_employees_vector(employees);
-
-			std::sort(std::begin(employees), std::end(employees),
-				[](auto& employee_one, auto& employee_two)
-				{
-					return employee_one.get_salary() < employee_two.get_salary();
-				});
-
-			vector_preparation::print_employees_vector(employees);
-
-			std::sort(std::begin(employees), std::end(employees),
-				[](auto& employee_one, auto& employee_two)
-				{
-					return employee_one.get_name() < employee_two.get_name();
-				});
-
-			vector_preparation::print_employees_vector(employees);
-
-			std::cout << "The vector " <<
-				(std::is_sorted(std::begin(employees), std::end(employees),
-					[](auto& employee_one, auto& employee_two)
-					{
-						return employee_one.get_age() < employee_two.get_age();
-					})
-					? "is " : "isn't ")
-				<< "sorted by age." << std::endl;
-
-			std::stable_sort(std::begin(employees), std::end(employees),
-				[](auto& employee_one, auto& employee_two)
-				{
-					return employee_one.get_age() < employee_two.get_age();
-				});
-
-			vector_preparation::print_employees_vector(employees);
-
-			std::cout << "The vector " << 
-				(std::is_sorted(std::begin(employees), std::end(employees),
-				[](auto& employee_one, auto& employee_two)
-					{
-						return employee_one.get_age() < employee_two.get_age();
-					}) 
-					? "is " : "isn't ") 
-				<< "sorted by age." << std::endl;
-		});
+					 std::cout << all_of << ' ' << none_of << ' ' << any_of << std::endl;
+				 });
 
 	do_try_catch([]()
-		{
-			using pairTry = std::pair<std::string, int>;
+				 {
+					 std::vector<int> vector_of_int;
+					 vector_preparation::fill_vector(vector_of_int);
 
-			pairTry pair;
-			pair = std::move(pairTry("Rafael", 29));
+					 vector_preparation::print_vector(vector_of_int);
 
-			std::cout << pair.first << ' ' << pair.second << std::endl;
+					 std::sort(std::begin(vector_of_int), std::end(vector_of_int));
 
-			std::vector<employees> vector_of_employees;
-			std::vector<employees> list_of_employees;
+					 vector_preparation::print_vector(vector_of_int);
+				 });
 
-			vector_preparation::fill_employees_vector(vector_of_employees);
-			vector_preparation::fill_employees_vector(list_of_employees);
+	do_try_catch([]()
+				 {
+					 std::vector<employees> employees;
+					 vector_preparation::fill_employees_vector(employees);
 
-			bool equal = std::equal(std::begin(vector_of_employees), std::end(vector_of_employees), std::begin(list_of_employees),
-									[](auto& employee_vector, auto& employee_list)
-									{
-										return employee_vector.get_age() == employee_list.get_age() &&
-											employee_vector.get_name() == employee_list.get_name() &&
-											employee_vector.get_salary() == employee_list.get_salary() &&
-											employee_vector.get_department() == employee_list.get_department();
-									});
+					 vector_preparation::print_employees_vector(employees);
 
-			if (!equal)
-			{
-				auto firstDiff = std::mismatch(std::begin(vector_of_employees), std::end(vector_of_employees), std::begin(list_of_employees),
-											   [](auto& employee_vector, auto& employee_list)
-											   {
-												   return employee_vector.get_age() == employee_list.get_age() &&
-													   employee_vector.get_name() == employee_list.get_name() &&
-													   employee_vector.get_salary() == employee_list.get_salary() &&
-													   employee_vector.get_department() == employee_list.get_department();
-											   });
+					 std::sort(std::begin(employees), std::end(employees),
+							   [](auto& employee_one, auto& employee_two)
+							   {
+								   return employee_one.get_salary() < employee_two.get_salary();
+							   });
 
-				std::cout << "First Diff is on slot: " << firstDiff.first - std::begin(vector_of_employees) << std::endl;
-			}
+					 vector_preparation::print_employees_vector(employees);
 
-			vector_preparation::print_employees_vector(vector_of_employees);
-			vector_preparation::print_employees_vector(list_of_employees);
+					 std::sort(std::begin(employees), std::end(employees),
+							   [](auto& employee_one, auto& employee_two)
+							   {
+								   return employee_one.get_name() < employee_two.get_name();
+							   });
 
-			std::cout << "The collections " << (equal ? "are " : "aren't ") << "equal." << std::endl;
-		});
+					 vector_preparation::print_employees_vector(employees);
+
+					 std::cout << "The vector " <<
+						 (std::is_sorted(std::begin(employees), std::end(employees),
+										 [](auto& employee_one, auto& employee_two)
+										 {
+											 return employee_one.get_age() < employee_two.get_age();
+										 })
+						  ? "is " : "isn't ")
+						 << "sorted by age." << std::endl;
+
+										 std::stable_sort(std::begin(employees), std::end(employees),
+														  [](auto& employee_one, auto& employee_two)
+														  {
+															  return employee_one.get_age() < employee_two.get_age();
+														  });
+
+										 vector_preparation::print_employees_vector(employees);
+
+										 std::cout << "The vector " <<
+											 (std::is_sorted(std::begin(employees), std::end(employees),
+															 [](auto& employee_one, auto& employee_two)
+															 {
+																 return employee_one.get_age() < employee_two.get_age();
+															 })
+											  ? "is " : "isn't ")
+											 << "sorted by age." << std::endl;
+				 });
+
+	do_try_catch([]()
+				 {
+					 using pairTry = std::pair<std::string, int>;
+
+					 pairTry pair;
+					 pair = std::move(pairTry("Rafael", 29));
+
+					 std::cout << pair.first << ' ' << pair.second << std::endl;
+
+					 std::vector<employees> vector_of_employees;
+					 std::vector<employees> list_of_employees;
+
+					 vector_preparation::fill_employees_vector(vector_of_employees);
+					 vector_preparation::fill_employees_vector(list_of_employees);
+
+					 bool equal = std::equal(std::begin(vector_of_employees), std::end(vector_of_employees), std::begin(list_of_employees),
+											 [](auto& employee_vector, auto& employee_list)
+											 {
+												 return employee_vector.get_age() == employee_list.get_age() &&
+													 employee_vector.get_name() == employee_list.get_name() &&
+													 employee_vector.get_salary() == employee_list.get_salary() &&
+													 employee_vector.get_department() == employee_list.get_department();
+											 });
+
+					 if (!equal)
+					 {
+						 auto firstDiff = std::mismatch(std::begin(vector_of_employees), std::end(vector_of_employees), std::begin(list_of_employees),
+														[](auto& employee_vector, auto& employee_list)
+														{
+															return employee_vector.get_age() == employee_list.get_age() &&
+																employee_vector.get_name() == employee_list.get_name() &&
+																employee_vector.get_salary() == employee_list.get_salary() &&
+																employee_vector.get_department() == employee_list.get_department();
+														});
+
+						 std::cout << "First Diff is on slot: " << firstDiff.first - std::begin(vector_of_employees) << std::endl;
+					 }
+
+					 vector_preparation::print_employees_vector(vector_of_employees);
+					 vector_preparation::print_employees_vector(list_of_employees);
+
+					 std::cout << "The collections " << (equal ? "are " : "aren't ") << "equal." << std::endl;
+				 });
 
 	// Comparing performance to build a string
 	do_try_catch([]()

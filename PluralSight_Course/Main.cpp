@@ -90,7 +90,6 @@ int main()
 	//	sLista.Insert(8);
 	//	sLista.Insert(9);
 
-
 	//	std::cout << sLista << std::endl;
 	//	std::cout << sLista[5] << std::endl;
 	//	std::cout << sLista.Find(4590) << std::endl;
@@ -133,22 +132,22 @@ int main()
 	//});
 
 	DoTryCatch([]()
-	{
-		bool expected = false;
-		std::atomic<bool> test = false;
-		if (!test.compare_exchange_strong(expected, true))
-		{
-			return false;
-		}
-		
-		if (!test.compare_exchange_strong(expected, true))
-		{
-			return false;
-		}
+			   {
+				   bool expected = false;
+				   std::atomic<bool> test = false;
+				   if (!test.compare_exchange_strong(expected, true))
+				   {
+					   return false;
+				   }
 
-		std::cout << test << ' ';
-		std::cout << expected << std::endl;
-	});
+				   if (!test.compare_exchange_strong(expected, true))
+				   {
+					   return false;
+				   }
+
+				   std::cout << test << ' ';
+				   std::cout << expected << std::endl;
+			   });
 
 	return 0;
 }
