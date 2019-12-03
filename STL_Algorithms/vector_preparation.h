@@ -5,12 +5,26 @@
 class vector_preparation
 {
 public:
-	static void fill_vector(std::vector<int>& v)
+	static void fill_vector(std::vector<int>& v, const int size)
 	{
-		for (int i = 100; i > 0; --i)
-		{
-			v.push_back(i);
-		}
+		v.resize(size);
+		int vector_values = size;
+		std::generate_n(std::begin(v), size,
+			[&vector_values]()
+			{
+				return (vector_values -= 1);
+			});
+	}
+
+	static void fill_vector_with_duplicates(std::vector<int>& v, const int size)
+	{
+		v.resize(size);
+		float values = size;
+		std::generate_n(std::begin(v), size,
+			[&values]()
+			{
+				return (int)(values -= 0.5);
+			});
 	}
 
 	static void fill_employees_vector(std::vector<employees>& e)
@@ -25,20 +39,34 @@ public:
 
 	static void print_vector(const std::vector<int>& v)
 	{
-		for (auto i = std::begin(v); i != std::end(v); ++i)
-		{
-			std::cout << *i << ' ';
-		}
+		std::cout << std::endl;
+		std::for_each(std::begin(v), std::end(v),
+			[](int value)
+			{
+				std::cout << value << ' ';
+			});
+		std::cout << std::endl;
+	}
+
+	static void print_vector_backwards(const std::vector<int>& v)
+	{
+		std::cout << std::endl;
+		std::for_each(std::rbegin(v), std::rend(v),
+			[](int value)
+			{
+				std::cout << value << ' ';
+			});
 		std::cout << std::endl;
 	}
 
 	static void print_employees_vector(const std::vector<employees>& e)
 	{
 		std::cout << std::endl;
-		for (auto i = std::begin(e); i != std::end(e); ++i)
-		{
-			std::cout << *i;
-		}
+		std::for_each(std::begin(e), std::end(e),
+			[](const auto& value)
+			{
+				std::cout << value;
+			});
 		std::cout << std::endl;
 	}
 };
